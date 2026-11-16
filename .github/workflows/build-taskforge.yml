@@ -7,6 +7,7 @@ on:
       - "apps/app-01-taskforge/**"
       - "build.gradle.kts"
       - "settings.gradle.kts"
+      - "gradle.properties"
       - ".github/workflows/build-taskforge.yml"
   workflow_dispatch:
 
