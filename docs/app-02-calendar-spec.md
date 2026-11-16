@@ -39,7 +39,9 @@ Exact Samsung screens and options vary by device, region, app version, and conne
 - Undo or trash behavior.
 
 ### Phase 3 — Android integration
-- Scheduled notifications using Android notification channels and appropriate runtime permissions.
+- Scheduled offline notifications using Android notification channels and Android 13+ runtime permission.
+- Configurable reminder lead time per event; reschedule on edit, cancel on delete, and restore after device reboot.
+- Use inexact idle-allowed alarms to avoid requiring special exact-alarm access; Android battery policies may delay delivery.
 - Calendar home-screen widget.
 - Share event text and export/import iCalendar (.ics).
 - Android Calendar Provider import/export integration only with explicit user permission.
