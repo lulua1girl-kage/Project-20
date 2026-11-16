@@ -5,7 +5,7 @@ Applications are added one at a time. The list below is intentionally not pre-fi
 | ID | Name | Purpose | Status |
 |---|---|---|---|
 | 01 | TaskForge | Offline task manager | Complete — built and device-tested |
-| 02 | TBD | To be defined | Planned |
+| 02 | Calendar | Offline-first calendar based on Samsung Calendar workflows | Specification complete; implementation in progress |
 | 03 | TBD | To be defined | Planned |
 | 04 | TBD | To be defined | Planned |
 | 05 | TBD | To be defined | Planned |
