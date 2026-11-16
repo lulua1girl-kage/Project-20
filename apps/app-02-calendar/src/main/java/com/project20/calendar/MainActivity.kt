@@ -1,9 +1,13 @@
 package com.project20.calendar
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +48,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import org.json.JSONArray
 import org.json.JSONObject
@@ -62,23 +68,34 @@ data class CalendarEvent(
     val endAt: Long,
     val allDay: Boolean,
     val location: String = "",
-    val notes: String = ""
+    val notes: String = "",
+    val reminderMinutes: Int = 10
 )
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
+        createCalendarNotificationChannel(this)
+        loadEvents(this).forEach { scheduleEventReminder(this, it) }
         setContent {
             MaterialTheme {
                 Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    CalendarHome(applicationContext)
+                    CalendarHome(
+                        applicationContext,
+                        onEnableNotifications = {
+                            if (Build.VERSION.SDK_INT >= 33) {
+                                permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            }
+                        }
+                    )
                 }
             }
         }
     }
 }
 
-private fun loadEvents(context: Context): List<CalendarEvent> {
+internal fun loadEvents(context: Context): List<CalendarEvent> {
     val raw = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         .getString(EVENTS_KEY, null) ?: return emptyList()
     return runCatching {
@@ -94,7 +111,8 @@ private fun loadEvents(context: Context): List<CalendarEvent> {
                         endAt = item.getLong("endAt"),
                         allDay = item.optBoolean("allDay", false),
                         location = item.optString("location"),
-                        notes = item.optString("notes")
+                        notes = item.optString("notes"),
+                        reminderMinutes = item.optInt("reminderMinutes", 10)
                     )
                 )
             }
@@ -114,6 +132,7 @@ private fun saveEvents(context: Context, events: List<CalendarEvent>) {
                 .put("allDay", event.allDay)
                 .put("location", event.location)
                 .put("notes", event.notes)
+                .put("reminderMinutes", event.reminderMinutes)
         )
     }
     context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
@@ -147,7 +166,7 @@ private fun timeLabel(time: Long): String =
     SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(time))
 
 @Composable
-private fun CalendarHome(context: Context) {
+private fun CalendarHome(context: Context, onEnableNotifications: () -> Unit) {
     val events = remember {
         mutableStateListOf<CalendarEvent>().apply { addAll(loadEvents(context)) }
     }
@@ -174,6 +193,12 @@ private fun CalendarHome(context: Context) {
                 selectedDay = today
                 displayedMonth = monthStart(today)
             }) { Text("Today") }
+        }
+
+        if (Build.VERSION.SDK_INT >= 33 &&
+            context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) {
+            TextButton(onClick = onEnableNotifications) { Text("Enable event reminders") }
         }
 
         Spacer(Modifier.height(12.dp))
@@ -313,6 +338,7 @@ private fun CalendarHome(context: Context) {
             onDismiss = { showEditor = false },
             onDelete = { event ->
                 events.removeAll { it.id == event.id }
+                cancelEventReminder(context, event.id)
                 saveEvents(context, events)
                 showEditor = false
             },
@@ -321,6 +347,7 @@ private fun CalendarHome(context: Context) {
                 if (index >= 0) events[index] = event else events.add(event)
                 events.sortBy { it.startAt }
                 saveEvents(context, events)
+                scheduleEventReminder(context, event)
                 selectedDay = dayStart(event.startAt)
                 displayedMonth = monthStart(selectedDay)
                 showEditor = false
@@ -380,6 +407,7 @@ private fun EventEditor(
     var startTime by remember(initial?.id) { mutableStateOf(initial?.let { timeLabel(it.startAt) } ?: "09:00") }
     var endTime by remember(initial?.id) { mutableStateOf(initial?.let { timeLabel(it.endAt) } ?: "10:00") }
     var allDay by remember(initial?.id) { mutableStateOf(initial?.allDay ?: false) }
+    var reminderMinutes by remember(initial?.id) { mutableStateOf((initial?.reminderMinutes ?: 10).toString()) }
     var error by remember { mutableStateOf<String?>(null) }
 
     AlertDialog(
@@ -398,6 +426,14 @@ private fun EventEditor(
                 }
                 OutlinedTextField(location, { location = it }, label = { Text("Location (optional)") }, singleLine = true)
                 OutlinedTextField(notes, { notes = it }, label = { Text("Notes (optional)") }, minLines = 2)
+                OutlinedTextField(
+                    value = reminderMinutes,
+                    onValueChange = { reminderMinutes = it.filter { ch -> ch.isDigit() || ch == '-' }.take(6) },
+                    label = { Text("Reminder minutes before") },
+                    supportingText = { Text("Use -1 for no reminder. All-day reminders are based on 09:00.") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true
+                )
                 if (error != null) Text(error!!, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             }
         },
@@ -405,6 +441,11 @@ private fun EventEditor(
             Button(onClick = {
                 if (title.isBlank()) {
                     error = "Enter an event title."
+                    return@Button
+                }
+                val reminder = reminderMinutes.toIntOrNull()
+                if (reminder == null || reminder < -1 || reminder > 10080) {
+                    error = "Reminder must be -1 (off) or between 0 and 10080 minutes."
                     return@Button
                 }
                 val start = Calendar.getInstance().apply { timeInMillis = dayStart(initial?.startAt ?: selectedDay) }
@@ -440,7 +481,8 @@ private fun EventEditor(
                         endAt = end.timeInMillis,
                         allDay = allDay,
                         location = location.trim(),
-                        notes = notes.trim()
+                        notes = notes.trim(),
+                        reminderMinutes = reminder
                     )
                 )
             }) { Text("Save") }
