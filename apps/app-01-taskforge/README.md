@@ -27,3 +27,5 @@ Open the Project-20 root folder in Android Studio, sync Gradle, and run the `app
 - Tasks are stored on the device and are not synchronized.
 - There are no due dates, reminders, categories, or cloud backup in this version.
 - Build and device verification are pending.
+
+The automated debug APK build runs from the repository's GitHub Actions workflow.
