@@ -9,6 +9,8 @@ An independent, offline-first Android calendar based on the documented core work
 - Create and edit timed or all-day events.
 - Event title, time, location, and notes.
 - Delete events.
+- Event reminders with configurable lead time, Android notifications, and reboot restoration.
+- Reminder permission prompt on Android 13 and newer; reminders work offline.
 - Local persistence across app restarts.
 
 ## Build
