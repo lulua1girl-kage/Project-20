@@ -37,6 +37,12 @@ Open the repository root in a compatible version of Android Studio, allow Gradle
 
 See [App 01 documentation](apps/app-01-taskforge/README.md) for its scope and implementation details.
 
+## Downloading the TaskForge APK
+
+Every push that changes App 01 or its build configuration starts the **Build TaskForge APK** GitHub Actions workflow. When the run succeeds, open the repository's **Actions** tab, select the latest **Build TaskForge APK** run, and download the **TaskForge-debug-apk** artifact. Extract the ZIP to get the installable debug APK. The artifact is retained for 14 days.
+
+The debug APK is suitable for testing. It is not a signed production release.
+
 ## Project status
 
 The initial repository structure and App 01 source are being established. A successful build or device test will only be reported after it has actually been run.
