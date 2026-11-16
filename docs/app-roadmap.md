@@ -4,7 +4,7 @@ Applications are added one at a time. The list below is intentionally not pre-fi
 
 | ID | Name | Purpose | Status |
 |---|---|---|---|
-| 01 | TaskForge | Offline task manager | In development |
+| 01 | TaskForge | Offline task manager | Complete — built and device-tested |
 | 02 | TBD | To be defined | Planned |
 | 03 | TBD | To be defined | Planned |
 | 04 | TBD | To be defined | Planned |
