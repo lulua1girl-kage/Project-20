@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Project-20"
 include(":apps:app-01-taskforge")
+include(":apps:app-02-calendar")
