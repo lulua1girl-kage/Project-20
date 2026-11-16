@@ -243,9 +243,11 @@ private fun WorldScreen(cities:MutableList<City>,now:Long,add:()->Unit) {
                 if(showCompare) {
                     val src=cities.firstOrNull { it.name==chosen } ?: cityCatalog[0]
                     val parts=time.split(":")
-                    val valid=parts.size==2 && parts[0].toIntOrNull() in 0..23 && parts[1].toIntOrNull() in 0..59
+                    val hourValue=parts.getOrNull(0)?.toIntOrNull() ?: -1
+                    val minuteValue=parts.getOrNull(1)?.toIntOrNull() ?: -1
+                    val valid=parts.size==2 && hourValue in 0..23 && minuteValue in 0..59
                     if(valid) {
-                        val cal=Calendar.getInstance(TimeZone.getTimeZone(src.zone)).apply { set(Calendar.HOUR_OF_DAY,parts[0].toInt());set(Calendar.MINUTE,parts[1].toInt());set(Calendar.SECOND,0) }
+                        val cal=Calendar.getInstance(TimeZone.getTimeZone(src.zone)).apply { set(Calendar.HOUR_OF_DAY,hourValue);set(Calendar.MINUTE,minuteValue);set(Calendar.SECOND,0) }
                         cities.filter { it.zone!=src.zone }.forEach { c ->
                             Text(c.name+"   "+clockText(cal.timeInMillis,c.zone,"HH:mm  EEE, d MMM"),color=Color(0xFFEAF2FA))
                         }
