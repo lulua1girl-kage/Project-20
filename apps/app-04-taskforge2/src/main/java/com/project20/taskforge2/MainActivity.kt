@@ -187,9 +187,9 @@ fun TaskForgeApp(context: Context) {
             topBar = { TopAppBar(title = { Text("TaskForge 2.0") }) },
             bottomBar = {
                 NavigationBar {
-                    listOf("Home", "Tasks", "Wallet", "Study", "Settings").forEach { item ->
+                    listOf("Home", "Tasks", "Wallet", "Study", "Analysis", "Settings").forEach { item ->
                         NavigationBarItem(selected = tab == item, onClick = { tab = item },
-                            icon = { Text(when(item) { "Home" -> "⌂"; "Tasks" -> "✓"; "Wallet" -> "★"; "Study" -> "◷"; else -> "⚙" }) },
+                            icon = { Text(when(item) { "Home" -> "⌂"; "Tasks" -> "✓"; "Wallet" -> "★"; "Study" -> "◷"; "Analysis" -> "▥"; else -> "⚙" }) },
                             label = { Text(item) })
                     }
                 }
@@ -236,6 +236,7 @@ fun TaskForgeApp(context: Context) {
                         }
                     }
                     "Study" -> StudyScreen(context) { refresh++ }
+                    "Analysis" -> UsageAnalysisScreen(context)
                     "Settings" -> {
                         Text("Settings", style = MaterialTheme.typography.titleLarge)
                         Text("Phone time: " + SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date()))
@@ -339,5 +340,29 @@ private fun StudyScreen(context: Context, onChanged: () -> Unit) {
             }
         }) { Text("Save study session") }
         Text("Initial reward rule: 10 NP per completed hour. Ten hours is a ceiling, not a target.")
+    }
+}
+
+ 
+@Composable
+private fun UsageAnalysisScreen(context: Context) {
+    var report by remember { mutableStateOf("Grant Usage Access in Android Settings to inspect app usage.") }
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text("Screen-time analysis", style = MaterialTheme.typography.titleLarge)
+        Button(onClick = {
+            try {
+                val manager = context.getSystemService(Context.USAGE_STATS_SERVICE) as android.app.usage.UsageStatsManager
+                val end = System.currentTimeMillis()
+                val stats = manager.queryUsageStats(android.app.usage.UsageStatsManager.INTERVAL_DAILY, end - 86400000L, end)
+                    .filter { it.totalTimeInForeground > 0 }
+                    .sortedByDescending { it.totalTimeInForeground }.take(20)
+                report = if (stats.isEmpty()) "No usage data. Confirm Usage Access is enabled." else stats.joinToString("\n") {
+                    val mins = it.totalTimeInForeground / 60000
+                    "\${it.packageName} — \${mins / 60}h \${mins % 60}m"
+                }
+            } catch (_: Exception) { report = "Usage Access unavailable. Enable it in Android Settings." }
+        }) { Text("Refresh last 24 hours") }
+        Text(report)
+        Text("Usage statistics require explicit Android Usage Access permission.")
     }
 }
