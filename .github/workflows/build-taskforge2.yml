@@ -1,0 +1,41 @@
+name: Build TaskForge 2.0 APK
+
+on:
+  push:
+    branches: [taskforge-2.0]
+    paths:
+      - "apps/app-04-taskforge2/**"
+      - "settings.gradle.kts"
+      - "build.gradle.kts"
+      - "gradle.properties"
+      - ".github/workflows/build-taskforge2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Verify Android SDK
+        run: |
+          test -d "$ANDROID_HOME/platforms/android-35"
+          test -d "$ANDROID_HOME/build-tools/35.0.0"
+      - uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: "8.11.1"
+          arguments: --version
+      - name: Assemble TaskForge 2.0
+        run: gradle :apps:app-04-taskforge2:assembleDebug --stacktrace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TaskForge-2.0-debug-apk
+          path: apps/app-04-taskforge2/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
