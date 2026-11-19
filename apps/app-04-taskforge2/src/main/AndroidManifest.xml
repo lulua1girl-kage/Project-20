@@ -22,5 +22,8 @@
         <receiver
             android:name=".TaskActionReceiver"
             android:exported="false" />
+        <receiver
+            android:name=".SleepReminderReceiver"
+            android:exported="false" />
     </application>
 </manifest>
