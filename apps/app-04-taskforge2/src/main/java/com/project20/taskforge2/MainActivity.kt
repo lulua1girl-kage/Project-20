@@ -123,7 +123,7 @@ class TaskAlarmReceiver : BroadcastReceiver() {
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle("Is it done?")
-            .setContentText("You said you would complete ${task.title}.")
+            .setContentText("You said you would complete ${task.title} by " + SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date(task.dueAt)) + ". Is it done?")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .addAction(0, "Done", doneIntent)
@@ -319,6 +319,15 @@ private fun TaskRow(task: TaskItem, context: Context, onChanged: () -> Unit) {
                     onChanged()
                 }
             }) { Text("Complete") }
+            TextButton(onClick = {
+                val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val intent = Intent(context, TaskAlarmReceiver::class.java).putExtra("taskId", task.id)
+                val pending = PendingIntent.getBroadcast(context, task.id.hashCode(), intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                alarm.cancel(pending)
+                LocalStore.saveTasks(context, LocalStore.tasks(context).filterNot { it.id == task.id })
+                onChanged()
+            }) { Text("Delete") }
         }
     }
 }
