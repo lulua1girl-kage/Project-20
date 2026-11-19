@@ -97,7 +97,7 @@ object LocalStore {
         entries.forEach { e -> array.put(JSONObject().put("id", e.id).put("sourceId", e.sourceId)
             .put("kind", e.kind).put("amount", e.amount).put("reason", e.reason).put("createdAt", e.createdAt)) }
         array.put(o)
-        prefs(context).edit().putString(LEDGER_KEY, array.toString()).commit()
+        return prefs(context).edit().putString(LEDGER_KEY, array.toString()).commit()
     }
 }
 
