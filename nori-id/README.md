@@ -32,10 +32,10 @@ Copy-Item .env.example .env
 
 Edit .env and set a unique NORI_SECRET_KEY (at least 32 characters) and a different NORI_BOOTSTRAP_TOKEN. Keep .env private; never commit it.
 
-Start the service:
+Start the service and load the local environment file:
 
 ~~~powershell
-uvicorn nori_id.main:app --host 127.0.0.1 --port 8765
+uvicorn nori_id.main:app --host 127.0.0.1 --port 8765 --env-file .env
 ~~~
 
 Open http://127.0.0.1:8765. Use the one-time bootstrap token to create the local owner account, then sign in.
