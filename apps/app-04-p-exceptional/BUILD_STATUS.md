@@ -14,12 +14,13 @@ Version: 0.5 prototype
 - Validated merge-only backup restore: file cap, schema cap, field allowlist, duplicate-ID skip, malformed value normalization
 - Offline shell cache
 - Loopback-only Python/SQLite task API with Host/Origin checks and payload limits
-- Capacity-aware workload summary (configurable daily capacity; no automatic rescheduling)\n- Date-scoped daily review notes stored locally with a 1,500-character cap
+- Capacity-aware workload summary (configurable daily capacity; no automatic rescheduling)
+- Date-scoped daily review notes stored locally with a 1,500-character cap and included in backup/restore
 - Research source ledger, competitor benchmark and platform decision notes
 
 ## Verified
-- Python unit/API/UI contract tests in the local archive: 9/9 passed
-- Node backup validation tests: 4/4 passed; capacity planner tests: 4/4 passed; daily review tests: 3/3 passed
+- Python unit/API/UI/inline-script tests in the local archive: 10/10 passed
+- Node backup validation tests: 4/4 passed; capacity planner tests: 4/4 passed; daily review tests: 4/4 passed; total Node tests: 12/12 passed
 - JavaScript syntax checks passed
 - ZIP integrity verified after packaging
 
