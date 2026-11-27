@@ -15,19 +15,19 @@ python backend/server.py
 Then open `http://127.0.0.1:8765`.
 
 ## Current features
-- Task capture, priority, completion, deletion and All/Open/Done filters
+- Task capture, priority, project label, estimate, completion, deletion and All/Open/Done filters
 - Browser localStorage persistence
 - Optional due-time reminder with explicit notification permission (best-effort while app is active)
 - 25-minute focus timer with pause/reset
 - 100 original principles
-- Progress metrics and JSON export
+- Capacity-aware daily workload (default 240 min, user-configurable 30–720; overload is a warning, never auto-reschedules), progress metrics and JSON export
 - Backup restore with app/schema validation, size and record caps, field allowlisting, duplicate-ID skipping, and merge-only behavior
 - PWA shell cache and offline reload after first successful load
 - SQLite API: `GET /api/health`, `GET/POST /api/tasks`, `PATCH/DELETE /api/tasks/{id}`
 - Loopback-only API with Host/Origin checks, payload limits, CSP and security headers
 
 ## Validation
-- Python HTTP/API/unit checks: 7/7 passed
+- Python HTTP/API/UI contract checks in the local archive: 9/9 passed
 - Node backup validation tests: 4/4 passed
 - JavaScript syntax checks and ZIP integrity passed
 
