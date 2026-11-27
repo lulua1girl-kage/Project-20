@@ -28,3 +28,19 @@ Updated 2026-11-27. This ledger records sources actually consulted. It does not 
 
 ## Research quality rule
 For every candidate source/repository, record date checked, product scope, evidence observed, implementation decision, license, maintenance status, and confidence. Search result counts are not equivalent to sources reviewed. Repository code must not be copied before license and security review.
+
+## Additional security sources checked
+- OWASP MASVS control groups: https://mas.owasp.org/MASVS/
+  - Storage, crypto, authentication, network, platform, code, resilience and privacy controls.
+- OWASP API Security Top 10 2023: https://api-security.owasp.org/editions/2023/en/0x11-t10/
+  - Object-level authorization, authentication, property authorization, resource limits, function-level authorization and security misconfiguration.
+- MDN Secure Contexts: https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts
+  - Localhost/loopback can be treated as potentially trustworthy for local PWA development; service workers still require a secure context.
+- MDN Service Workers: https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers
+  - HTTPS requirement for deployed service workers and localhost exception for development.
+
+## MVP hardening added
+- API validates Host against the expected loopback host/port.
+- API rejects cross-origin Origin headers on loopback endpoints.
+- Integration checks verify hostile Origin and Host rejection and confirm no task mutation.
+- This mitigates browser-based DNS-rebinding/CSRF risks for this local development server; it is not a substitute for production authentication or authorization.
