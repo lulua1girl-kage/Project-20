@@ -14,7 +14,8 @@ Version: 0.4 prototype
 - Validated merge-only backup restore: file cap, schema cap, field allowlist, duplicate-ID skip, malformed value normalization
 - Offline shell cache
 - Loopback-only Python/SQLite task API with Host/Origin checks and payload limits
-- Capacity-aware workload summary (configurable daily capacity; no automatic rescheduling)\n- Research source ledger, competitor benchmark and platform decision notes
+- Capacity-aware workload summary (configurable daily capacity; no automatic rescheduling)
+- Research source ledger, competitor benchmark and platform decision notes
 
 ## Verified
 - Python unit/API/UI contract tests in the local archive: 9/9 passed
