@@ -1,11 +1,11 @@
 # P-Exceptional Build Status
 
 Date: 2026-11-27
-Version: 0.5 prototype
+Version: 0.6 prototype
 
 ## Delivered
 - Responsive dark-red PWA shell and locally bundled 2.6-second splash
-- Task capture, priorities, optional project labels and estimates, completion, deletion and filters
+- Task capture, priorities, project labels, estimates, due date/time, Today/Upcoming/All/Open/Done views, completion and deletion
 - Browser local persistence
 - 100 original principles/quotes
 - Focus timer with pause/reset
@@ -19,10 +19,10 @@ Version: 0.5 prototype
 - Research source ledger, competitor benchmark and platform decision notes
 
 ## Verified
-- GitHub Actions CI: passed on commit 5b5263b952a5023bee126ef484bd9b78af36bc47 (Python API/UI checks, Node tests and JS syntax checks)
+- GitHub Actions CI: passed on commit c4517593da3e071fb5f0d8713713e2f7d83eb137 (Python API/UI checks, Node tests and JS syntax checks)
 
 - Python unit/API/UI/inline-script tests in the local archive: 10/10 passed
-- Node backup validation tests: 4/4 passed; capacity planner tests: 4/4 passed; daily review tests: 4/4 passed; total Node tests: 12/12 passed
+- Node backup validation tests: 4/4 passed; capacity planner and task-view tests: 5/5 passed; daily review tests: 4/4 passed; total Node tests: 12/12 passed
 - JavaScript syntax checks passed
 - ZIP integrity verified after packaging
 
