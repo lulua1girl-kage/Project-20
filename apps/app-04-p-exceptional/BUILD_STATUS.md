@@ -1,7 +1,7 @@
 # P-Exceptional Build Status
 
 Date: 2026-11-27
-Version: 0.3 prototype
+Version: 0.3.1 prototype
 
 ## Delivered
 - Responsive dark-red PWA shell and locally bundled 2.6-second splash
@@ -13,11 +13,11 @@ Version: 0.3 prototype
 - Progress indicator, JSON export and clear-completed
 - Validated merge-only backup restore: file cap, schema cap, field allowlist, duplicate-ID skip, malformed value normalization
 - Offline shell cache
-- Loopback-only Python/SQLite task API
+- Loopback-only Python/SQLite task API with Host/Origin checks and payload limits
 - Research source ledger and platform decision notes
 
 ## Verified
-- Python unit/API tests: 5/5 passed
+- Python unit/API tests: 7/7 passed
 - Node backup validation tests: 4/4 passed
 - JavaScript syntax checks passed
 - ZIP integrity verified after packaging
