@@ -24,10 +24,10 @@ Then open `http://127.0.0.1:8765`.
 - Backup restore with app/schema validation, size and record caps, field allowlisting, duplicate-ID skipping, and merge-only behavior
 - PWA shell cache and offline reload after first successful load
 - SQLite API: `GET /api/health`, `GET/POST /api/tasks`, `PATCH/DELETE /api/tasks/{id}`
-- Loopback-only API, CSP and basic security headers
+- Loopback-only API with Host/Origin checks, payload limits, CSP and security headers
 
 ## Validation
-- Python HTTP/API/unit checks: 5/5 passed
+- Python HTTP/API/unit checks: 7/7 passed
 - Node backup validation tests: 4/4 passed
 - JavaScript syntax checks and ZIP integrity passed
 
