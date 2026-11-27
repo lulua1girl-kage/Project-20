@@ -1,11 +1,11 @@
 # P-Exceptional Build Status
 
 Date: 2026-11-27
-Version: 0.3.1 prototype
+Version: 0.4 prototype
 
 ## Delivered
 - Responsive dark-red PWA shell and locally bundled 2.6-second splash
-- Task capture, priorities, completion, deletion and filters
+- Task capture, priorities, optional project labels and estimates, completion, deletion and filters
 - Browser local persistence
 - 100 original principles/quotes
 - Focus timer with pause/reset
@@ -14,11 +14,11 @@ Version: 0.3.1 prototype
 - Validated merge-only backup restore: file cap, schema cap, field allowlist, duplicate-ID skip, malformed value normalization
 - Offline shell cache
 - Loopback-only Python/SQLite task API with Host/Origin checks and payload limits
-- Research source ledger and platform decision notes
+- Capacity-aware workload summary (configurable daily capacity; no automatic rescheduling)\n- Research source ledger, competitor benchmark and platform decision notes
 
 ## Verified
-- Python unit/API tests: 7/7 passed
-- Node backup validation tests: 4/4 passed
+- Python unit/API/UI contract tests in the local archive: 9/9 passed
+- Node backup validation tests: 4/4 passed; capacity planner tests: 4/4 passed
 - JavaScript syntax checks passed
 - ZIP integrity verified after packaging
 
