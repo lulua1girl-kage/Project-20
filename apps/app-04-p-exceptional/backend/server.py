@@ -29,7 +29,7 @@ class Handler(SimpleHTTPRequestHandler):
   super().end_headers()
  def reply(self,status,obj):
   body=json.dumps(obj,separators=(',',':')).encode()
-  self.send_response(status);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
+  self.send_response(status);self.send_header('Content-Type','application/json; charset=utf-8');self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
  def api_guard(self):
   # Reject hostile Host headers and browser cross-origin calls to loopback.
   host=self.headers.get('Host','').lower();port=self.server.server_port
@@ -51,12 +51,14 @@ class Handler(SimpleHTTPRequestHandler):
   return v if isinstance(v,dict) else None
  def do_GET(self):
   p=urlparse(self.path).path
-  if p.startswith('/api/') and not self.api_guard():return\n  if p=='/api/health':return self.reply(200,{'status':'ok','mode':'local-only','apiVersion':1})
+  if p.startswith('/api/') and not self.api_guard():return
+  if p=='/api/health':return self.reply(200,{'status':'ok','mode':'local-only','apiVersion':1})
   if p=='/api/tasks':
    with dbopen() as db:rows=db.execute('SELECT * FROM tasks ORDER BY created_at DESC').fetchall()
    return self.reply(200,{'tasks':[dict(x) for x in rows]})
   return super().do_GET()
  def do_POST(self):
+  if not self.api_guard():return
   if urlparse(self.path).path!='/api/tasks':return self.reply(404,{'error':'not_found'})
   x=self.body()
   if x is None:return self.reply(400,{'error':'invalid_json_or_body_too_large'})
@@ -67,6 +69,7 @@ class Handler(SimpleHTTPRequestHandler):
   with dbopen() as db:db.execute('INSERT INTO tasks VALUES(?,?,?,?,?,?)',tuple(task.values()))
   return self.reply(201,task)
  def do_PATCH(self):
+  if not self.api_guard():return
   p=urlparse(self.path).path.strip('/').split('/')
   if len(p)!=3 or p[:2]!=['api','tasks']:return self.reply(404,{'error':'not_found'})
   x=self.body()
@@ -77,13 +80,16 @@ class Handler(SimpleHTTPRequestHandler):
    row=db.execute('SELECT * FROM tasks WHERE id=?',(p[2],)).fetchone()
   return self.reply(200,dict(row))
  def do_DELETE(self):
+  if not self.api_guard():return
   p=urlparse(self.path).path.strip('/').split('/')
   if len(p)!=3 or p[:2]!=['api','tasks']:return self.reply(404,{'error':'not_found'})
   with dbopen() as db:
    cur=db.execute('DELETE FROM tasks WHERE id=?',(p[2],))
    if not cur.rowcount:return self.reply(404,{'error':'task_not_found'})
   self.send_response(204);self.end_headers()
- def log_message(self,fmt,*args):super().log_message(fmt,*args)
+ def log_message(self,fmt,*args):
+  # Do not log task contents or request bodies.
+  super().log_message(fmt,*args)
 
 def main():
  port=int(os.environ.get('PEXCEPTIONAL_PORT','8765'))
