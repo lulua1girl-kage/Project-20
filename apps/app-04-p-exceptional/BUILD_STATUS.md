@@ -1,32 +1,32 @@
 # P-Exceptional Build Status
 
 Date: 2026-11-27
-Version: 0.2
+Version: 0.3 prototype
 
 ## Delivered
-- Working responsive PWA shell and dark-red visual system
-- Locally bundled opening image, 2.6-second splash
-- Task capture, priorities, done/open filters, delete
+- Responsive dark-red PWA shell and locally bundled 2.6-second splash
+- Task capture, priorities, completion, deletion and filters
 - Browser local persistence
-- Quote rotation (100 original short principles)
-- Focus timer
-- Optional due-time and browser notification permission
-- Progress indicator, JSON export, clear completed
-- Offline shell caching
-- Standalone loopback Python/SQLite task API
-- Test suite and research decision log
+- 100 original principles/quotes
+- Focus timer with pause/reset
+- Optional due-time reminders (best-effort while app is active)
+- Progress indicator, JSON export and clear-completed
+- Validated merge-only backup restore: file cap, schema cap, field allowlist, duplicate-ID skip, malformed value normalization
+- Offline shell cache
+- Loopback-only Python/SQLite task API
+- Research source ledger and platform decision notes
 
 ## Verified
-- Python unittest: 5/5 pass
-- API HTTP integration: health, task create/list/update/delete, invalid input and missing resource
-- JavaScript syntax: app.js and service worker pass Node syntax check
-- HTML parser smoke check passes
-- ZIP integrity verified
+- Python unit/API tests: 5/5 passed
+- Node backup validation tests: 4/4 passed
+- JavaScript syntax checks passed
+- ZIP integrity verified after packaging
 
 ## Known limitations
-- Browser localStorage and SQLite API are not yet synchronized
+- Browser localStorage and SQLite API are not synchronized
 - Single local profile; no account registration or cloud sync
-- Native reminder scheduling not yet implemented; browser reminders are best-effort
-- No Android/iOS/desktop binaries yet
-- No production security audit or independent penetration test
-- Research counts requested (200 websites / 100 repositories / 150 operational / 300 security / 50 trends) are not yet completed; source inventory is being expanded transparently
+- Browser reminders are best-effort; native scheduled notifications are not implemented
+- No native Android/iOS/desktop binaries
+- No certificate issuer or admin console implementation
+- No production security assessment or independent penetration test
+- Large requested research counts remain in progress; source ledger reports only sources actually reviewed
