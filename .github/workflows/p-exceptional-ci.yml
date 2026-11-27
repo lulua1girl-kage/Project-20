@@ -1,0 +1,31 @@
+name: P-Exceptional prototype checks
+on:
+  push:
+    branches: [p-exceptional-spec-v0.1]
+    paths:
+      - 'apps/app-04-p-exceptional/**'
+      - '.github/workflows/p-exceptional-ci.yml'
+  pull_request:
+    paths:
+      - 'apps/app-04-p-exceptional/**'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Python API and UI contract tests
+        run: python -m unittest discover -s apps/app-04-p-exceptional/tests -v
+      - name: JavaScript unit tests
+        run: node --test apps/app-04-p-exceptional/tests/*.cjs
+      - name: JavaScript syntax checks
+        run: |
+          node --check apps/app-04-p-exceptional/web/backup.js
+          node --check apps/app-04-p-exceptional/web/planning.js
+          node --check apps/app-04-p-exceptional/web/review.js
+          node --check apps/app-04-p-exceptional/web/sw.js
