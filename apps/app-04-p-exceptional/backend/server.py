@@ -30,6 +30,18 @@ class Handler(SimpleHTTPRequestHandler):
  def reply(self,status,obj):
   body=json.dumps(obj,separators=(',',':')).encode()
   self.send_response(status);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
+ def api_guard(self):
+  # Reject hostile Host headers and browser cross-origin calls to loopback.
+  host=self.headers.get('Host','').lower();port=self.server.server_port
+  allowed={f'127.0.0.1:{port}',f'localhost:{port}'}
+  if host not in allowed:
+   self.reply(421,{'error':'invalid_host'});return False
+  origin=self.headers.get('Origin')
+  if origin:
+   parsed=urlparse(origin)
+   if parsed.scheme!='http' or parsed.netloc.lower()!=host or parsed.path not in ('','/') or parsed.params or parsed.query or parsed.fragment:
+    self.reply(403,{'error':'cross_origin_request_rejected'});return False
+  return True
  def body(self):
   try:n=int(self.headers.get('Content-Length','0'))
   except ValueError:return None
@@ -39,7 +51,7 @@ class Handler(SimpleHTTPRequestHandler):
   return v if isinstance(v,dict) else None
  def do_GET(self):
   p=urlparse(self.path).path
-  if p=='/api/health':return self.reply(200,{'status':'ok','mode':'local-only','apiVersion':1})
+  if p.startswith('/api/') and not self.api_guard():return\n  if p=='/api/health':return self.reply(200,{'status':'ok','mode':'local-only','apiVersion':1})
   if p=='/api/tasks':
    with dbopen() as db:rows=db.execute('SELECT * FROM tasks ORDER BY created_at DESC').fetchall()
    return self.reply(200,{'tasks':[dict(x) for x in rows]})
