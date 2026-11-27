@@ -1,11 +1,11 @@
 # App 04 — P-Exceptional
 
-**Status:** functional PWA/local API MVP v0.5 prototype; production native clients and authenticated multi-user service remain future phases.
+**Status:** functional PWA/local API MVP v0.6 prototype; production native clients and authenticated multi-user service remain future phases.
 
 P-Exceptional is an offline-first productivity client with a dark-red design system. It is independent from App 01 TaskForge and follows Project 20 shared identity direction.
 
 ## Delivered source archive
-The current runnable source archive is attached in this conversation as `P-Exceptional-MVP-v0.5.zip`. The archive includes the responsive PWA, local API, SQLite store, opening artwork, 100 original principles, task capture and priority, filters, focus timer, optional due-time reminders, export, validated merge-only backup restore including daily review notes, capacity planner, tests and research notes.
+The current runnable source archive is attached in this conversation as `P-Exceptional-MVP-v0.6.zip`. The archive includes the responsive PWA, local API, SQLite store, opening artwork, 100 original principles, task capture and priority, filters, focus timer, optional due-time reminders, export, validated merge-only backup restore including daily review notes, capacity planner, tests and research notes.
 
 ## Run
 Python 3.10+:
@@ -15,7 +15,7 @@ python backend/server.py
 Then open `http://127.0.0.1:8765`.
 
 ## Current features
-- Task capture, priority, project label, estimate, completion, deletion and All/Open/Done filters
+- Task capture, priority, project label, estimate, due date/time, Today/Upcoming/All/Open/Done views, completion and deletion
 - Browser localStorage persistence
 - Optional due-time reminder with explicit notification permission (best-effort while app is active)
 - 25-minute focus timer with pause/reset
@@ -29,7 +29,7 @@ Then open `http://127.0.0.1:8765`.
 ## Validation
 - GitHub Actions CI passed: Python API/UI tests, Node unit tests and JS syntax checks
 - Operational/privacy/accessibility research memo added in `OPERATIONAL_RESEARCH.md`
-- Local archive validation: 10/10 Python tests and 12/12 Node tests passed
+- Local archive validation: 10/10 Python tests and 13/13 Node tests passed
 - Node backup validation tests: 4/4 passed
 - JavaScript syntax checks and ZIP integrity passed
 
