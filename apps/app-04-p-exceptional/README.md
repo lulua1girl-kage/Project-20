@@ -27,6 +27,8 @@ Then open `http://127.0.0.1:8765`.
 - Loopback-only API with Host/Origin checks, payload limits, CSP and security headers
 
 ## Validation
+- GitHub Actions CI passed: Python API/UI tests, Node unit tests and JS syntax checks
+- Operational/privacy/accessibility research memo added in `OPERATIONAL_RESEARCH.md`
 - Local archive validation: 10/10 Python tests and 12/12 Node tests passed
 - Node backup validation tests: 4/4 passed
 - JavaScript syntax checks and ZIP integrity passed
