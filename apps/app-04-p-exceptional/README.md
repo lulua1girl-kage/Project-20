@@ -1,11 +1,11 @@
 # App 04 — P-Exceptional
 
-**Status:** functional PWA/local API MVP v0.4 prototype; production native clients and authenticated multi-user service remain future phases.
+**Status:** functional PWA/local API MVP v0.5 prototype; production native clients and authenticated multi-user service remain future phases.
 
 P-Exceptional is an offline-first productivity client with a dark-red design system. It is independent from App 01 TaskForge and follows Project 20 shared identity direction.
 
 ## Delivered source archive
-The current runnable source archive is attached in this conversation as `P-Exceptional-MVP-v0.4.zip`. The archive includes the responsive PWA, local API, SQLite store, opening artwork, 100 original principles, task capture and priority, filters, focus timer, optional due-time reminders, export, validated merge-only backup restore, tests and research notes.
+The current runnable source archive is attached in this conversation as `P-Exceptional-MVP-v0.5.zip`. The archive includes the responsive PWA, local API, SQLite store, opening artwork, 100 original principles, task capture and priority, filters, focus timer, optional due-time reminders, export, validated merge-only backup restore, tests and research notes.
 
 ## Run
 Python 3.10+:
@@ -20,7 +20,7 @@ Then open `http://127.0.0.1:8765`.
 - Optional due-time reminder with explicit notification permission (best-effort while app is active)
 - 25-minute focus timer with pause/reset
 - 100 original principles
-- Capacity-aware daily workload (default 240 min, user-configurable 30–720; overload is a warning, never auto-reschedules), progress metrics and JSON export
+- Capacity-aware daily workload (default 240 min, user-configurable 30–720; overload is a warning, never auto-reschedules), date-scoped daily review notes, progress metrics and JSON export
 - Backup restore with app/schema validation, size and record caps, field allowlisting, duplicate-ID skipping, and merge-only behavior
 - PWA shell cache and offline reload after first successful load
 - SQLite API: `GET /api/health`, `GET/POST /api/tasks`, `PATCH/DELETE /api/tasks/{id}`
